@@ -15,7 +15,7 @@ Rectangle {
     width: column.implicitWidth
 
     Column {
-        id: column
-        spacing: 0
+      id: column
+      spacing: 0
     }
 }
