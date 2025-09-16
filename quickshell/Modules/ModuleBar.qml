@@ -8,7 +8,6 @@ Rectangle {
     color: Theme.background_var
     radius: Theme.rounding
 
-
     Behavior on width {
       NumberAnimation { duration: 150; easing.type: Easing.InOutQuad }
     }
