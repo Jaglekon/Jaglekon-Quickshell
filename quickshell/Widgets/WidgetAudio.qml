@@ -29,8 +29,7 @@ ModuleWidget {
       id: icon
       label: clicked ? moduleRoot.volumeIcon() : moduleRoot.volumeIcon() + Math.round(Audio.sink.audio.volume * 100) + "%"
       hovered: moduleRoot.hovered
-      color: Audio.sink?.audio?.muted ? Theme.red: (moduleRoot.hovered ? Theme.background : Theme.blue)
-      y: 1
+      color: Audio.sink?.audio?.muted ? Theme.red: (moduleRoot.hovered ? Theme.background_var : Theme.blue)
     }
 
     Process {
@@ -85,10 +84,10 @@ ModuleWidget {
           radius: Theme.rounding * 0.5
           x: (width + moduleRoot.spacing) * index
           color: Audio.sink?.audio?.muted
-          ? (index < moduleRoot.volume ? Theme.red : Theme.selection_background)
+          ? (index < moduleRoot.volume ? Theme.red : Theme.selection_background_var)
           : (moduleRoot.hovered
-          ? (index < moduleRoot.volume ? Theme.background : Theme.selection_background)
-          : (index < moduleRoot.volume ? Theme.blue : Theme.selection_background))
+          ? (index < moduleRoot.volume ? Theme.background_var : Theme.selection_background_var)
+          : (index < moduleRoot.volume ? Theme.blue : Theme.selection_background_var))
         }
       }
     }

@@ -10,7 +10,7 @@ Text {
     renderType: Text.NativeRendering
     font.pixelSize: Theme.fontPixelSize
     font.weight: Theme.fontWeight
-    color: hovered ? Theme.background : Theme.blue
+    color: hovered ? Theme.background_var : Theme.blue
     horizontalAlignment: Text.AlignRight
     verticalAlignment: Text.AlignVCenter
 }

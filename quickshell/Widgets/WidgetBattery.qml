@@ -36,7 +36,7 @@ ModuleWidget {
 
   ModuleText {
     label: batteryIcon() + (moduleRoot.percentage.toFixed(2) * 100) + "%"
-    color: (percentage <= 0.1) ? Theme.red: (moduleRoot.hovered ? Theme.background : Theme.blue)
+    color: (percentage <= 0.1) ? Theme.red: (moduleRoot.hovered ? Theme.background_var : Theme.blue)
     hovered: moduleRoot.hovered
   }
 }

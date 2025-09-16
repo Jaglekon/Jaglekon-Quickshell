@@ -36,7 +36,7 @@ Row {
               anchors.verticalCenter: parent.verticalCenter
               id: workspaceNumber
               label: ws.id.toString()
-              color: hovered ? (Theme.background) : (ws.id === Hyprland.focusedWorkspace.id ? Theme.purple : Theme.blue)
+              color: hovered ? (Theme.background_var) : (ws.id === Hyprland.focusedWorkspace.id ? Theme.purple : Theme.blue)
               hovered: moduleWidget.hovered
             }
 
@@ -48,7 +48,7 @@ Row {
                 id: workspaceText
                 label: modelData
                 hovered: moduleWidget.hovered
-                color: hovered ? (Theme.background) : (ws.id === Hyprland.focusedWorkspace.id ? Theme.purple : Theme.blue)
+                color: hovered ? (Theme.background_var) : (ws.id === Hyprland.focusedWorkspace.id ? Theme.purple : Theme.blue)
                 font.pixelSize: (modelData === "󰑋") ? Theme.fontPixelSize * 1.3 : Theme.fontPixelSize
               }
             }

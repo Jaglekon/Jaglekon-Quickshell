@@ -58,7 +58,7 @@ ModuleWidget {
       ? "󰂱 "
       : "󰂳 ")
       : "󰂲 ")
-      color: !Bluetooth.bluetoothEnabled ? Theme.red: (moduleRoot.hovered ? Theme.background : Theme.blue)
+      color: !Bluetooth.bluetoothEnabled ? Theme.red: (moduleRoot.hovered ? Theme.background_var : Theme.blue)
       hovered: moduleRoot.hovered
     }
   }

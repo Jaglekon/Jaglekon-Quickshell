@@ -10,7 +10,7 @@ import "../Services";
 PanelWindow {
   screen: modelData
   visible: root.openPowerMenu && root.openPowerMenu.indexOf(typeof modelData !== 'undefined' ? modelData : 0) !== -1
-  WlrLayershell.layer: WlrLayer.Bottom
+  WlrLayershell.layer: WlrLayer.Background
 
   anchors {
     top: true

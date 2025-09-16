@@ -68,7 +68,7 @@ ModuleWidget {
       label: clicked
       ? moduleRoot.networkIcon() + "  " + (Network.rxDelta.toFixed(1) + " KB/s ↓  " + (Network.txDelta !== undefined ? Network.txDelta.toFixed(1) : "0.0") + " KB/s ↑")
       : moduleRoot.networkIcon()
-      color: !(Network.wifi || Network.ethernet) ? Theme.red: (moduleRoot.hovered ? Theme.background : Theme.blue)
+      color: !(Network.wifi || Network.ethernet) ? Theme.red: (moduleRoot.hovered ? Theme.background_var : Theme.blue)
       hovered: moduleRoot.hovered
     }
   }

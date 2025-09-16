@@ -9,7 +9,7 @@ import "../Services";
 
 PanelWindow {
   screen: modelData
-  WlrLayershell.layer: WlrLayer.Bottom
+  WlrLayershell.layer: WlrLayer.Background
 
   anchors {
     top: true

@@ -3,18 +3,20 @@ pragma Singleton
         import QtQuick 2.0
 
         QtObject {
-          property color background: "#10131c"
-          property color background_var: "#181b25"
-          property color selection_background: "#c4c6d3"
-          property color blue: "#b0c6ff"
-          property color border: "#00429b"
+          property color background: "#11131c"
+          property color background_var: "#282934"
+          property color selection_background: "#c6c5d3"
+          property color blue: "#bac3ff"
+          property color border: "#0030c7"
           property color red: "#ffb4ab"
-          property color purple: "#cebef7"
-          property color purple_border: "#cebef7"
+          property color purple: "#d7bcf3"
+          property color purple_border: "#d7bcf3"
 
-          property string wallpaper: "/home/jag/Pictures/wallpapers/wp1.png"
-          property string logo: "/home/jag/.config/quickshell/test/Assets/logo.svg"
-          
+          property string wallpaper: "/home/jag/Pictures/wallpapers/wp5.jpg"
+          property string logo: "/home/jag/.config/quickshell/test/quickshell/Assets/logo.svg"
+          property string logo_back: "/home/jag/.config/quickshell/test/quickshell/Assets/logo_back.svg"
+
+
           property string fontFamily: "Source Sans Pro"
           property int fontPixelSize: 13
           property int fontWeight: Font.DemiBold

@@ -62,7 +62,7 @@ ModuleWidget {
           width: Theme.borderSize
           height: visualizerPoints[index] !== undefined ? Math.max(Math.round((visualizerPoints[index] / 16) * Theme.fontPixelSize * 1.5), Theme.borderSize) : Theme.borderSize
           radius: Theme.rounding
-          color: hovered ? Theme.background : Theme.blue
+          color: hovered ? Theme.background_var : Theme.blue
           Behavior on height { NumberAnimation { duration: 120 } }
         }
       }

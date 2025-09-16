@@ -15,7 +15,7 @@ ModuleWidget {
       id: nix
       height: root.widgetHeight * 0.6
       width: root.widgetHeight * 0.6
-      source: Qt.resolvedUrl(Theme.logo)
+      source: hovered ? Qt.resolvedUrl(Theme.logo_back) : Qt.resolvedUrl(Theme.logo)
       anchors.verticalCenter: parent.verticalCenter
       anchors.horizontalCenter: parent.horizontalCenter
       fillMode: Image.PreserveAspectCrop
