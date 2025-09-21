@@ -18,7 +18,7 @@ PanelWindow {
     left: true
   }
 
-  color: Theme.background
+  color: "transparent"
 
   implicitHeight: Math.max(moduleLeft1.height, moduleRight1.height, moduleMiddle1.height) + Theme.fontPixelSize
   onImplicitHeightChanged: {
@@ -30,15 +30,16 @@ PanelWindow {
 
   ModuleBar {
     id: moduleLeft1
+    anchorSide: "left"
     anchors.left: parent.left
     anchors.leftMargin: Theme.fontPixelSize
     
-
     WidgetNix {}
   }
 
   ModuleBar {
     id: moduleLeft2
+    anchorSide: "left"
     anchors.left: moduleLeft1.right
     anchors.leftMargin: Theme.fontPixelSize
 
@@ -47,6 +48,7 @@ PanelWindow {
 
   ModuleBar {
     id: moduleMiddle1
+    anchorSide: "left"
     anchors.horizontalCenter: parent.horizontalCenter
 
     WidgetMusic {}
@@ -54,15 +56,18 @@ PanelWindow {
 
   ModuleBar {
     id: moduleRight1
+    anchorSide: "right"
     anchors.right: parent.right
     anchors.rightMargin: Theme.fontPixelSize
 
-    WidgetBattery {}
-    WidgetAudio {}
-    WidgetBluetooth {}
-    WidgetNetwork {}
-    WidgetClock {}
     WidgetTray {}
+    WidgetClock {}
+    WidgetNetwork {}
+    WidgetBluetooth {}
+    WidgetAudio {}
+    WidgetBattery {}
+
+
   }
 
 }

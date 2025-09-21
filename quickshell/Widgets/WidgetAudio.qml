@@ -86,8 +86,8 @@ ModuleWidget {
           color: Audio.sink?.audio?.muted
           ? (index < moduleRoot.volume ? Theme.red : Theme.selection_background_var)
           : (moduleRoot.hovered
-          ? (index < moduleRoot.volume ? Theme.background_var : Theme.selection_background_var)
-          : (index < moduleRoot.volume ? Theme.blue : Theme.selection_background_var))
+          ? (index < moduleRoot.volume ? Theme.background_var : Theme.selection_background)
+          : (index < moduleRoot.volume ? Theme.blue : Theme.selection_background))
         }
       }
     }
@@ -97,12 +97,12 @@ ModuleWidget {
       hoverEnabled: true
       cursorShape: Qt.PointingHandCursor
       acceptedButtons: Qt.LeftButton | Qt.RightButton | Qt.MiddleButton
-      onReleased: {
+      onReleased: function(mouse) {
         if (mouse.button === Qt.RightButton) {
           muteProc.running = true;
         }
       }
-      onClicked: {
+      onClicked: function(mouse) {
         if (mouse.button === Qt.MiddleButton) {
           moduleRoot.clicked = !moduleRoot.clicked;
         } else if (mouse.button === Qt.LeftButton) {

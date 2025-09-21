@@ -1,4 +1,5 @@
 import QtQuick
+import QtQuick.Effects;
 import "../Themes"
 
 Item {
@@ -13,29 +14,202 @@ Item {
   property color backgroundColor: "transparent"
   property color borderColor: "transparent"
   property int heightImplicit: Theme.fontPixelSize
+  property int widgetIndex: -1
+  property int totalWidgets: 1 
+  property var workspaceContainerId: null  // Reference to WidgetWorkspaces component if this is a dynamic widget
+  property int workspaceIndex: -1  // Index within the WidgetWorkspaces component
+  property string parentAnchorSide: parent && parent.anchorSide ? parent.anchorSide : "left"
+  property bool isFirstWidget: widgetIndex === 0
+  property bool isLastWidget: widgetIndex === totalWidgets - 1
+  property real animatedWidth: contentRow.implicitWidth + 2 * paddingHorizontal
+
+  // Calculate radius for each corner based on position and anchor side
+  function getTopLeftRadius() {
+    if (parentAnchorSide === "right") {
+      return isLastWidget ? Theme.rounding : 2
+    } else if (parentAnchorSide === "left") {
+      return isFirstWidget ? Theme.rounding : 2
+    } else if (parentAnchorSide === "top") {
+      return isFirstWidget ? Theme.rounding : 2
+    } else if (parentAnchorSide === "bottom") {
+      return isLastWidget ? Theme.rounding : 2
+    }
+    return 2
+  }
+  
+  function getTopRightRadius() {
+    if (parentAnchorSide === "right") {
+      return isFirstWidget ? Theme.rounding : 2
+    } else if (parentAnchorSide === "left") {
+      return isLastWidget ? Theme.rounding : 2
+    } else if (parentAnchorSide === "top") {
+      return isFirstWidget ? Theme.rounding : 2
+    } else if (parentAnchorSide === "bottom") {
+      return isLastWidget ? Theme.rounding : 2
+    }
+    return 2
+  }
+  
+  function getBottomLeftRadius() {
+    if (parentAnchorSide === "right") {
+      return isLastWidget ? Theme.rounding : 2
+    } else if (parentAnchorSide === "left") {
+      return isFirstWidget ? Theme.rounding : 2
+    } else if (parentAnchorSide === "top") {
+      return isLastWidget ? Theme.rounding : 2
+    } else if (parentAnchorSide === "bottom") {
+      return isFirstWidget ? Theme.rounding : 2
+    }
+    return 2
+  }
+  
+  function getBottomRightRadius() {
+    if (parentAnchorSide === "right") {
+      return isFirstWidget ? Theme.rounding : 2
+    } else if (parentAnchorSide === "left") {
+      return isLastWidget ? Theme.rounding : 2
+    } else if (parentAnchorSide === "top") {
+      return isLastWidget ? Theme.rounding : 2
+    } else if (parentAnchorSide === "bottom") {
+      return isFirstWidget ? Theme.rounding : 2
+    }
+    return 2
+  }
+
   default property alias content: contentRow.data
 
-  Behavior on width {
-        NumberAnimation { duration: 2000; easing.type: Easing.InOutQuad }
-    }
-
-  implicitWidth: box.implicitWidth
-  implicitHeight: box.implicitHeight
+  implicitWidth: box.width
+  implicitHeight: box.height
 
   Rectangle {
     id: box
-    color: hovered ? moduleRoot.hoverColor : moduleRoot.backgroundColor
+    color: "transparent"
     radius: Theme.rounding + 3
-    border.width: Theme.borderSize
-    border.color: moduleRoot.borderColor
-    implicitWidth: contentRow.implicitWidth + 2 * paddingHorizontal
-    implicitHeight: heightImplicit + 2 * paddingVertical
+    width: contentRow.implicitWidth + 2 * paddingHorizontal
+    height: heightImplicit + 2 * paddingVertical
+    clip: true  
+    z: parent.z
+
+    Behavior on width {
+      NumberAnimation { 
+        duration: 150
+        easing.type: Easing.InOutQuad
+      }
+    }
+
+    Rectangle {
+      id: topLeft
+      anchors.fill: parent
+      border.width: Theme.borderSize
+      border.color: moduleRoot.borderColor
+      color: hovered ? moduleRoot.hoverColor : moduleRoot.backgroundColor
+      radius: getTopLeftRadius()
+      layer.enabled: true
+      layer.effect: MultiEffect {
+        maskEnabled: true
+        maskSource: topLeftMask
+      }
+    }
+    Rectangle {
+      id: topRight
+      anchors.fill: parent
+      border.width: Theme.borderSize
+      border.color: moduleRoot.borderColor
+      color: hovered ? moduleRoot.hoverColor : moduleRoot.backgroundColor
+      radius: getTopRightRadius()
+      layer.enabled: true
+      layer.effect: MultiEffect {
+        maskEnabled: true
+        maskSource: topRightMask
+      }
+    }
+
+    Rectangle {
+      id: bottomLeft
+      anchors.fill: parent
+      border.width: Theme.borderSize
+      border.color: moduleRoot.borderColor
+      color: hovered ? moduleRoot.hoverColor : moduleRoot.backgroundColor
+      radius: getBottomLeftRadius()
+      layer.enabled: true
+      layer.effect: MultiEffect {
+        maskEnabled: true
+        maskSource: bottomLeftMask
+      }
+    }
+    Rectangle {
+      id: bottomRight
+      anchors.fill: parent
+      border.width: Theme.borderSize
+      border.color: moduleRoot.borderColor
+      color: hovered ? moduleRoot.hoverColor : moduleRoot.backgroundColor
+      radius: getBottomRightRadius()
+      layer.enabled: true
+      layer.effect: MultiEffect {
+        maskEnabled: true
+        maskSource: bottomRightMask
+      }
+    }
+
+    Item {
+      id: topLeftMask
+      anchors.fill: parent
+      layer.enabled: true
+      visible: false
+      Rectangle {
+        anchors.left: parent.left
+        anchors.top: parent.top
+        width: parent.width / 2
+        height: parent.height / 2
+      }
+    }
+    
+    Item {
+      id: topRightMask
+      anchors.fill: parent
+      layer.enabled: true
+      visible: false
+      Rectangle {
+        anchors.right: parent.right
+        anchors.top: parent.top
+        width: parent.width / 2
+        height: parent.height / 2
+      }    
+    }
+
+    Item {
+      id: bottomLeftMask
+      anchors.fill: parent
+      layer.enabled: true
+      visible: false
+      Rectangle {
+        anchors.left: parent.left
+        anchors.bottom: parent.bottom
+        width: parent.width / 2
+        height: parent.height / 2
+
+      }
+    }
+    
+    Item {
+      id: bottomRightMask
+      anchors.fill: parent
+      layer.enabled: true
+      visible: false
+      Rectangle {
+        anchors.right: parent.right
+        anchors.bottom: parent.bottom
+        width: parent.width / 2
+        height: parent.height / 2
+      }    
+    }
 
     Row {
       id: contentRow
       anchors.centerIn: parent
       spacing: moduleRoot.spacing
     }
+    
   }
 
   MouseArea {
@@ -45,5 +219,6 @@ Item {
     onExited: hovered = false
     acceptedButtons: Qt.NoButton
     cursorShape: undefined
+    z: parent.z 
   }
-}
+  }

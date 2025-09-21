@@ -64,24 +64,4 @@ PanelWindow {
     
 
 
-    Rectangle {
-        id: barWithBackground
-        width: 120; height: 80; x: 100; y: 50;
-        clip: true
-        visible: false
-        color: "black"
-        Rectangle {
-            id: bar
-            color: "orange"
-            width: 60; height: 80; radius: 80
-            NumberAnimation on x {
-                running: true
-                from: -(bar.width * 1.2 )
-                to: barWithBackground.width * 1.2
-                loops: Animation.Infinite
-                duration: 1000
-            }
-        }
-    }
-
 }

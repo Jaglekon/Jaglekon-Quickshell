@@ -22,7 +22,6 @@ PanelWindow {
     right: true
   }
 
-
   color: "transparent"
   implicitWidth: visible ? (moduleLeft1.width + Theme.fontPixelSize * 2) : 0
   implicitHeight: visible ? (moduleLeft1.height + Theme.fontPixelSize * 1.5) : 0
@@ -43,6 +42,12 @@ PanelWindow {
     width: root.powerWidth * 0.5
     height: root.powerHeight + root.panelHeight
     color: Theme.background
+    Behavior on width {
+      NumberAnimation { 
+        duration: 150
+        easing.type: Easing.InOutQuad
+      }
+    }
   }
 
   Rectangle {
@@ -53,14 +58,27 @@ PanelWindow {
     height: root.powerHeight + root.panelHeight
     color: Theme.background
     radius: Theme.rounding * 1.5
-    ModuleColumn {
+    Behavior on width {
+      NumberAnimation { 
+        duration: 150
+        easing.type: Easing.InOutQuad
+      }
+    }
+    
+    
+    ModuleBar {
       id: moduleLeft1
+      anchorSide: "top"
+      autoCenter: false
       anchors.top: parent.top
       anchors.topMargin: root.panelHeight + Theme.gapIn
       anchors.left: parent.left
       anchors.leftMargin: Theme.fontPixelSize
 
-      WidgetPowerMenu {}
+      WidgetPowerOff {}
+      WidgetReboot {}
+      WidgetLogOut {}
+      WidgetLock {}
     }
   }
 
@@ -74,6 +92,12 @@ PanelWindow {
     clip: true
     visible: false
     color: Theme.background
+    Behavior on width {
+      NumberAnimation { 
+        duration: 150
+        easing.type: Easing.InOutQuad
+      }
+    }
   }
 
   Rectangle {
@@ -86,6 +110,12 @@ PanelWindow {
     clip: true
     visible: false
     color: Theme.background
+    Behavior on width {
+      NumberAnimation { 
+        duration: 150
+        easing.type: Easing.InOutQuad
+      }
+    }
   }
 
   MultiEffect {
