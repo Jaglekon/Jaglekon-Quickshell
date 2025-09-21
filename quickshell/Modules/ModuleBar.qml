@@ -63,7 +63,6 @@ Rectangle {
     }
 
     function updateWidgetIndices() {
-        console.log("ModuleBar: Updating widget indices, found", children.length, "children, anchorSide:", anchorSide)
         let allChildren = []
         
         // Collect all children and their original positions
@@ -125,8 +124,6 @@ Rectangle {
             return a.originalIndex - b.originalIndex
         })
         
-        console.log("Sorted", allChildren.length, "widgets")
-        
         // Assign sequential indices
         let widgets = []
         for (let i = 0; i < allChildren.length; i++) {
@@ -134,7 +131,6 @@ Rectangle {
             widget.widgetIndex = i
             widget.totalWidgets = allChildren.length
             widgets.push(widget)
-            console.log("Assigned widgetIndex", i, "to widget", allChildren[i].isWorkspace ? "(workspace)" : "(static)")
         }
         
         if (anchorSide === "right") {
@@ -149,7 +145,6 @@ Rectangle {
                     widget.anchors.bottom = undefined
                     widget.anchors.verticalCenter = bar.verticalCenter
                     widget.anchors.horizontalCenter = undefined
-                    console.log("Right-side widget", widget.widgetIndex, "anchored to parent right")
                 } else {
                     let prevWidget = widgets[i - 1]
                     widget.anchors.right = Qt.binding(function() { return prevWidget.left })
@@ -158,7 +153,6 @@ Rectangle {
                     widget.anchors.bottom = undefined
                     widget.anchors.verticalCenter = bar.verticalCenter
                     widget.anchors.horizontalCenter = undefined
-                    console.log("Right-side widget", widget.widgetIndex, "anchored to widget", prevWidget.widgetIndex, "left")
                 }
             }
         } else if (anchorSide === "top") {
@@ -173,7 +167,6 @@ Rectangle {
                     widget.anchors.right = undefined
                     widget.anchors.horizontalCenter = bar.horizontalCenter
                     widget.anchors.verticalCenter = undefined
-                    console.log("Top-side widget", widget.widgetIndex, "anchored to parent top")
                 } else {
                     let prevWidget = widgets[i - 1]
                     widget.anchors.top = Qt.binding(function() { return prevWidget.bottom })
@@ -182,7 +175,6 @@ Rectangle {
                     widget.anchors.right = undefined
                     widget.anchors.horizontalCenter = bar.horizontalCenter
                     widget.anchors.verticalCenter = undefined
-                    console.log("Top-side widget", widget.widgetIndex, "anchored to widget", prevWidget.widgetIndex, "bottom")
                 }
             }
         } else if (anchorSide === "bottom") {
@@ -197,7 +189,6 @@ Rectangle {
                     widget.anchors.right = undefined
                     widget.anchors.horizontalCenter = bar.horizontalCenter
                     widget.anchors.verticalCenter = undefined
-                    console.log("Bottom-side widget", widget.widgetIndex, "anchored to parent bottom")
                 } else {
                     let prevWidget = widgets[i - 1]
                     widget.anchors.bottom = Qt.binding(function() { return prevWidget.top })
@@ -206,7 +197,6 @@ Rectangle {
                     widget.anchors.right = undefined
                     widget.anchors.horizontalCenter = bar.horizontalCenter
                     widget.anchors.verticalCenter = undefined
-                    console.log("Bottom-side widget", widget.widgetIndex, "anchored to widget", prevWidget.widgetIndex, "top")
                 }
             }
         } else {
@@ -221,7 +211,6 @@ Rectangle {
                     widget.anchors.bottom = undefined
                     widget.anchors.verticalCenter = bar.verticalCenter
                     widget.anchors.horizontalCenter = undefined
-                    console.log("Left-side widget", widget.widgetIndex, "anchored to parent left")
                 } else {
                     let prevWidget = widgets[i - 1]
                     widget.anchors.left = Qt.binding(function() { return prevWidget.right })
@@ -230,7 +219,6 @@ Rectangle {
                     widget.anchors.bottom = undefined
                     widget.anchors.verticalCenter = bar.verticalCenter
                     widget.anchors.horizontalCenter = undefined
-                    console.log("Left-side widget", widget.widgetIndex, "anchored to widget", prevWidget.widgetIndex, "right")
                 }
             }
         }
@@ -241,7 +229,6 @@ Rectangle {
                 child.widgetIndex = -1
                 child.anchors.left = undefined
                 child.anchors.right = undefined
-                console.log("Reset invisible widget anchors")
             }
         }
         
@@ -259,7 +246,6 @@ Rectangle {
                 let child = bar.children[i]
                 if (child && typeof child.widgetIndex !== 'undefined') {
                     child.visibleChanged.connect(function() {
-                        console.log("Widget visibility changed, updating indices")
                         bar.updateWidgetIndices()
                     })
                 }

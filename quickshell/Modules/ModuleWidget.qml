@@ -23,57 +23,15 @@ Item {
   property bool isLastWidget: widgetIndex === totalWidgets - 1
   property real animatedWidth: contentRow.implicitWidth + 2 * paddingHorizontal
 
-  // Calculate radius for each corner based on position and anchor side
-  function getTopLeftRadius() {
-    if (parentAnchorSide === "right") {
-      return isLastWidget ? Theme.rounding : 2
-    } else if (parentAnchorSide === "left") {
-      return isFirstWidget ? Theme.rounding : 2
-    } else if (parentAnchorSide === "top") {
-      return isFirstWidget ? Theme.rounding : 2
-    } else if (parentAnchorSide === "bottom") {
-      return isLastWidget ? Theme.rounding : 2
+  // Calculate radius for each corner - compacted version
+  function getCornerRadius(corner) {
+    const sides = {
+      "topLeft": parentAnchorSide === "right" ? isLastWidget : isFirstWidget,
+      "topRight": parentAnchorSide === "right" ? isFirstWidget : (parentAnchorSide === "left" ? isLastWidget : isFirstWidget), 
+      "bottomLeft": parentAnchorSide === "right" ? isLastWidget : (parentAnchorSide === "bottom" ? isFirstWidget : (parentAnchorSide === "top" ? isLastWidget : isFirstWidget)),
+      "bottomRight": parentAnchorSide === "right" ? isFirstWidget : (parentAnchorSide === "left" ? isLastWidget : (parentAnchorSide === "top" ? isLastWidget : isFirstWidget))
     }
-    return 2
-  }
-  
-  function getTopRightRadius() {
-    if (parentAnchorSide === "right") {
-      return isFirstWidget ? Theme.rounding : 2
-    } else if (parentAnchorSide === "left") {
-      return isLastWidget ? Theme.rounding : 2
-    } else if (parentAnchorSide === "top") {
-      return isFirstWidget ? Theme.rounding : 2
-    } else if (parentAnchorSide === "bottom") {
-      return isLastWidget ? Theme.rounding : 2
-    }
-    return 2
-  }
-  
-  function getBottomLeftRadius() {
-    if (parentAnchorSide === "right") {
-      return isLastWidget ? Theme.rounding : 2
-    } else if (parentAnchorSide === "left") {
-      return isFirstWidget ? Theme.rounding : 2
-    } else if (parentAnchorSide === "top") {
-      return isLastWidget ? Theme.rounding : 2
-    } else if (parentAnchorSide === "bottom") {
-      return isFirstWidget ? Theme.rounding : 2
-    }
-    return 2
-  }
-  
-  function getBottomRightRadius() {
-    if (parentAnchorSide === "right") {
-      return isFirstWidget ? Theme.rounding : 2
-    } else if (parentAnchorSide === "left") {
-      return isLastWidget ? Theme.rounding : 2
-    } else if (parentAnchorSide === "top") {
-      return isLastWidget ? Theme.rounding : 2
-    } else if (parentAnchorSide === "bottom") {
-      return isFirstWidget ? Theme.rounding : 2
-    }
-    return 2
+    return sides[corner] ? Theme.rounding : 2
   }
 
   default property alias content: contentRow.data
@@ -97,57 +55,26 @@ Item {
       }
     }
 
-    Rectangle {
-      id: topLeft
-      anchors.fill: parent
-      border.width: Theme.borderSize
-      border.color: moduleRoot.borderColor
-      color: hovered ? moduleRoot.hoverColor : moduleRoot.backgroundColor
-      radius: getTopLeftRadius()
-      layer.enabled: true
-      layer.effect: MultiEffect {
-        maskEnabled: true
-        maskSource: topLeftMask
-      }
-    }
-    Rectangle {
-      id: topRight
-      anchors.fill: parent
-      border.width: Theme.borderSize
-      border.color: moduleRoot.borderColor
-      color: hovered ? moduleRoot.hoverColor : moduleRoot.backgroundColor
-      radius: getTopRightRadius()
-      layer.enabled: true
-      layer.effect: MultiEffect {
-        maskEnabled: true
-        maskSource: topRightMask
-      }
-    }
-
-    Rectangle {
-      id: bottomLeft
-      anchors.fill: parent
-      border.width: Theme.borderSize
-      border.color: moduleRoot.borderColor
-      color: hovered ? moduleRoot.hoverColor : moduleRoot.backgroundColor
-      radius: getBottomLeftRadius()
-      layer.enabled: true
-      layer.effect: MultiEffect {
-        maskEnabled: true
-        maskSource: bottomLeftMask
-      }
-    }
-    Rectangle {
-      id: bottomRight
-      anchors.fill: parent
-      border.width: Theme.borderSize
-      border.color: moduleRoot.borderColor
-      color: hovered ? moduleRoot.hoverColor : moduleRoot.backgroundColor
-      radius: getBottomRightRadius()
-      layer.enabled: true
-      layer.effect: MultiEffect {
-        maskEnabled: true
-        maskSource: bottomRightMask
+    // Corner rectangles with preserved masking - compacted
+    Repeater {
+      model: [
+        { corner: "topLeft", maskId: topLeftMask },
+        { corner: "topRight", maskId: topRightMask },
+        { corner: "bottomLeft", maskId: bottomLeftMask },
+        { corner: "bottomRight", maskId: bottomRightMask }
+      ]
+      
+      Rectangle {
+        anchors.fill: parent
+        border.width: Theme.borderSize
+        border.color: moduleRoot.borderColor
+        color: hovered ? moduleRoot.hoverColor : moduleRoot.backgroundColor
+        radius: getCornerRadius(modelData.corner)
+        layer.enabled: true
+        layer.effect: MultiEffect {
+          maskEnabled: true
+          maskSource: modelData.maskId
+        }
       }
     }
 
@@ -161,6 +88,7 @@ Item {
         anchors.top: parent.top
         width: parent.width / 2
         height: parent.height / 2
+        color: "white"
       }
     }
     
@@ -174,6 +102,7 @@ Item {
         anchors.top: parent.top
         width: parent.width / 2
         height: parent.height / 2
+        color: "white"
       }    
     }
 
@@ -187,7 +116,7 @@ Item {
         anchors.bottom: parent.bottom
         width: parent.width / 2
         height: parent.height / 2
-
+        color: "white"
       }
     }
     
@@ -201,6 +130,7 @@ Item {
         anchors.bottom: parent.bottom
         width: parent.width / 2
         height: parent.height / 2
+        color: "white"
       }    
     }
 
@@ -219,6 +149,6 @@ Item {
     onExited: hovered = false
     acceptedButtons: Qt.NoButton
     cursorShape: undefined
-    z: parent.z 
+    z: 10  // Above all the rectangles
   }
   }

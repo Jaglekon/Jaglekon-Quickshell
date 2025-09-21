@@ -12,11 +12,12 @@ Item {
   property var createdWidgets: []
   property bool isUpdating: false
   property int baseWidgetIndex: -1  // Position where this WidgetWorkspaces sits among static widgets
+  property int updateGeneration: 0  // Track update cycles to prevent race conditions
   
   // Debounce timer to prevent multiple rapid updates
   Timer {
     id: debounceTimer
-    interval: 50 // Wait 50ms before actually updating
+    interval: 100 // Increased to 100ms for better debouncing
     running: false
     repeat: false
     onTriggered: {
@@ -75,6 +76,8 @@ Item {
   }
   
   function updateWorkspaces() {
+    // Stop any existing timer and restart it
+    debounceTimer.stop()
     debounceTimer.restart()
   }
   
@@ -108,15 +111,17 @@ Item {
         staticWidgetsBefore++
       }
     }
-    
     baseWidgetIndex = staticWidgetsBefore
-    console.log("WidgetWorkspaces baseWidgetIndex calculated as:", baseWidgetIndex)
   }
   
   function doUpdateWorkspaces() {
     if (isUpdating) {
       return
     }
+    
+    // Increment generation to invalidate any pending updates
+    updateGeneration++
+    let currentGeneration = updateGeneration
     
     isUpdating = true
     
@@ -126,7 +131,7 @@ Item {
     // Get current workspaces
     let workspaces = Hyprland.workspaces.values
     
-    // Clean up existing widgets
+    // Clean up existing widgets immediately
     for (let i = 0; i < createdWidgets.length; i++) {
       if (createdWidgets[i]) {
         createdWidgets[i].destroy()
@@ -134,8 +139,19 @@ Item {
     }
     createdWidgets = []
     
+    // Force immediate update of parent to clear old widgets from layout
+    if (parent && parent.updateWidgetIndices) {
+      parent.updateWidgetIndices()
+    }
+    
     // Create new ModuleWidget for each workspace
     for (let i = 0; i < workspaces.length; i++) {
+      // Check if this update cycle is still valid
+      if (currentGeneration !== updateGeneration) {
+        isUpdating = false
+        return // Abort if a newer update has started
+      }
+      
       let workspace = workspaces[i]
       let widget = workspaceWidgetComponent.createObject(parent, {
         "ws": workspace
@@ -145,29 +161,28 @@ Item {
         widget.workspaceContainerId = workspacesContainer
         widget.workspaceIndex = i  // Index within this WidgetWorkspaces
         createdWidgets.push(widget)
-        console.log("Created workspace widget", i, "with workspaceContainerId:", workspacesContainer)
       }
     }
     
-    // Force the parent ModuleBar to update indices for all widgets
-    if (parent && parent.updateWidgetIndices) {
-      Qt.callLater(parent.updateWidgetIndices)
-    }
-    
     isUpdating = false
+    
+    // Final layout update
+    if (parent && parent.updateWidgetIndices && currentGeneration === updateGeneration) {
+      parent.updateWidgetIndices()
+    }
   }
   
   Connections {
     target: Hyprland.workspaces
     function onChanged() {
-      Qt.callLater(updateWorkspaces)
+      updateWorkspaces()
     }
   }
   
   Connections {
     target: Hyprland
     function onFocusedWorkspaceChanged() {
-      Qt.callLater(updateWorkspaces)
+      updateWorkspaces()
     }
   }
   
