@@ -44,7 +44,7 @@ PanelWindow {
     color: Theme.background
     Behavior on width {
       NumberAnimation { 
-        duration: 150
+        duration: 200
         easing.type: Easing.InOutQuad
       }
     }
@@ -60,7 +60,7 @@ PanelWindow {
     radius: Theme.rounding * 1.5
     Behavior on width {
       NumberAnimation { 
-        duration: 150
+        duration: 200
         easing.type: Easing.InOutQuad
       }
     }
@@ -79,6 +79,7 @@ PanelWindow {
       WidgetReboot {}
       WidgetLogOut {}
       WidgetLock {}
+
     }
   }
 
@@ -94,7 +95,7 @@ PanelWindow {
     color: Theme.background
     Behavior on width {
       NumberAnimation { 
-        duration: 150
+        duration: 200
         easing.type: Easing.InOutQuad
       }
     }
@@ -112,7 +113,7 @@ PanelWindow {
     color: Theme.background
     Behavior on width {
       NumberAnimation { 
-        duration: 150
+        duration: 200
         easing.type: Easing.InOutQuad
       }
     }

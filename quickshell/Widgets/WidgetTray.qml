@@ -11,6 +11,12 @@ ModuleWidget {
 
   property bool anyTrayVisible: discord.visible || steam.visible || whatsApp.visible
   paddingHorizontal: anyTrayVisible ? 10 : 0
+  
+  onAnyTrayVisibleChanged: {
+    if (parent && parent.updateWidgetIndices) {
+      Qt.callLater(parent.updateWidgetIndices)
+    }
+  }
 
   Discord { id: discord }
   Steam { id: steam }

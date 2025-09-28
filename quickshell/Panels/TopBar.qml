@@ -67,7 +67,6 @@ PanelWindow {
     WidgetAudio {}
     WidgetBattery {}
 
-
   }
 
 }

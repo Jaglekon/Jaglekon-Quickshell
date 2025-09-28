@@ -69,13 +69,21 @@ Rectangle {
         for (let i = 0; i < children.length; i++) {
             let child = children[i]
             if (child && typeof child.widgetIndex !== 'undefined' && child.visible) {
-                allChildren.push({
-                    widget: child,
-                    originalIndex: i,
-                    isWorkspace: child.workspaceContainerId !== null,
-                    workspaceIndex: child.workspaceIndex || 0,
-                    containerId: child.workspaceContainerId
-                })
+                // Special check for WidgetTray - only include if it has visible content
+                let shouldInclude = true
+                if (child.anyTrayVisible !== undefined && !child.anyTrayVisible) {
+                    shouldInclude = false
+                }
+                
+                if (shouldInclude) {
+                    allChildren.push({
+                        widget: child,
+                        originalIndex: i,
+                        isWorkspace: child.workspaceContainerId !== null,
+                        workspaceIndex: child.workspaceIndex || 0,
+                        containerId: child.workspaceContainerId
+                    })
+                }
             }
         }
         

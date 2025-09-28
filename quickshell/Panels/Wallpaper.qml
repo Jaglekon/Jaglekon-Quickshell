@@ -61,7 +61,6 @@ PanelWindow {
             radius: Theme.rounding * 1.5
         }
     }
-    
 
 
 }

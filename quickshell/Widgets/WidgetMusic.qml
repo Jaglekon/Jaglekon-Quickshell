@@ -24,8 +24,7 @@ ModuleWidget {
         moduleRoot.visualizerPoints = points;
         let avg = points.reduce((a, b) => a + b, 0) / points.length;
         let speed = (avg - 0) * (2.5 - 0) / (15 - 0) + 0;
-        speed = Math.max(0, Math.min(2.5, speed));
-        moduleRoot.gifSpeed = speed;
+        moduleRoot.gifSpeed = Math.max(0, Math.min(2.5, speed));
       }
     }
   }

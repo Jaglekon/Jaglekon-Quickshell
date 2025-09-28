@@ -149,6 +149,6 @@ Item {
     onExited: hovered = false
     acceptedButtons: Qt.NoButton
     cursorShape: undefined
-    z: 10  // Above all the rectangles
+    z: 10 
   }
   }
