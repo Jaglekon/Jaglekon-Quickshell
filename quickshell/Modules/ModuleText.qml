@@ -11,6 +11,4 @@ Text {
     font.pixelSize: Theme.fontPixelSize
     font.weight: Theme.fontWeight
     color: hovered ? Theme.background_var : Theme.blue
-    horizontalAlignment: Text.AlignRight
-    verticalAlignment: Text.AlignVCenter
 }

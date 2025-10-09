@@ -28,15 +28,19 @@ Singleton {
             } else if (appId.indexOf("kitty") !== -1) {
                 icons.push(" ");
             } else if (appId.indexOf("obs") !== -1) {
-                icons.push("󰑋");
+                icons.push("󰑋 ");
             } else if (appId.indexOf("code") !== -1 || appId.indexOf("vscode") !== -1) {
                 icons.push("\ue70c ");
             } else if (appId.indexOf("librewolf") !== -1) {
                 icons.push("\uf269 ");
+            } else if (appId.indexOf("steam_app") !== -1) {
+                icons.push("󰊗 ");
             } else if (appId.indexOf("steam") !== -1) {
                 icons.push("\uf1b6 ");
-            } else if (appId.indexOf("thunar") !== -1) {
+            } else if (appId.indexOf("thunar") !== -1 || appId.indexOf("xdg-desktop-portal-gtk") !== -1) {
                 icons.push("  ");
+            } else if (appId.indexOf("kdenlive") !== -1) {
+                icons.push("󰿎 ");
             } else if (appId.indexOf("vesktop") !== -1 || appId.indexOf("discord") !== -1) {
                 icons.push("󰙯 ");
             } else {

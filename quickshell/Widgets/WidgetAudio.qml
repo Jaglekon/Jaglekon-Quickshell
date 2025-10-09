@@ -9,16 +9,7 @@ ModuleWidget {
   id: moduleRoot
   spacing: 2
 
-  property int maxVolume: 10
-  property int volume: Math.round((Audio.sink?.audio?.volume ?? 0) * maxVolume)
   property bool clicked: false
-
-  function volumeIcon() {
-    if (Audio.sink?.audio?.muted) return "   ";
-    if (volume === 0) return " ";
-    else if (volume < maxVolume / 2) return "  ";
-    else return "   ";
-  }
 
   Item {
     implicitWidth: icon.implicitWidth
@@ -27,7 +18,7 @@ ModuleWidget {
 
     ModuleText {
       id: icon
-      label: clicked ? moduleRoot.volumeIcon() : moduleRoot.volumeIcon() + Math.round(Audio.sink.audio.volume * 100) + "%"
+      label: clicked ? Audio.volumeIcon() : Audio.volumeIcon() + Math.round(Audio.sink.audio.volume * 100) + "%"
       hovered: moduleRoot.hovered
       color: Audio.sink?.audio?.muted ? Theme.red: (moduleRoot.hovered ? Theme.background_var : Theme.blue)
     }
@@ -77,17 +68,17 @@ ModuleWidget {
       id: volumeSlider
       spacing: Theme.fontPixelSize * 0.15
       Repeater {
-        model: maxVolume
+        model: Audio.maxVolume
         Rectangle {
           width: Theme.fontPixelSize * 0.6
           height: Theme.fontPixelSize * 0.8
           radius: Theme.rounding * 0.5
           x: (width + moduleRoot.spacing) * index
           color: Audio.sink?.audio?.muted
-          ? (index < moduleRoot.volume ? Theme.red : Theme.selection_background_var)
+          ? (index < Audio.volume ? Theme.red : Theme.selection_background_var)
           : (moduleRoot.hovered
-          ? (index < moduleRoot.volume ? Theme.background_var : Theme.selection_background)
-          : (index < moduleRoot.volume ? Theme.blue : Theme.selection_background))
+          ? (index < Audio.volume ? Theme.background_var : Theme.selection_background)
+          : (index < Audio.volume ? Theme.blue : Theme.selection_background))
         }
       }
     }
@@ -119,9 +110,9 @@ ModuleWidget {
       function setVolume(mouseX) {
         var barWidth = 8 + moduleRoot.spacing;
         var idx = Math.floor(mouseX / barWidth);
-        idx = Math.max(0, Math.min(idx, maxVolume));
+        idx = Math.max(0, Math.min(idx, Audio.maxVolume));
         if (Audio.sink && Audio.sink.audio) {
-          Audio.sink.audio.volume = (idx) / maxVolume;
+          Audio.sink.audio.volume = (idx) / Audio.maxVolume;
         }
       }
     }

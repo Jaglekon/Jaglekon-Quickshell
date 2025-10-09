@@ -25,4 +25,5 @@ pragma Singleton
           property int gapIn: 5
           property int rounding: 8
           property int borderSize: 2
+          property real opacity: 0.8
         }

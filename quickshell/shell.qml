@@ -1,3 +1,5 @@
+//@ pragma Env QS_NO_RELOAD\_POPUP=1
+
 import Quickshell;
 import Quickshell.Io;
 import QtQuick;
@@ -5,6 +7,8 @@ import "./Widgets";
 import "./Modules";
 import "./Themes";
 import "./Panels";
+import "./notifications"
+
 
 Scope {
   id: root
@@ -29,8 +33,10 @@ Scope {
       TopBar {id: topBar}
       PowerMenu {id: powerMenu}
       BarrierPower {id: barrierPower}
-      //RightPanel {id: rightPanel}
       Wallpaper {id: wallpaper}
+      WallpaperMenu {id: wallpaperMenu}
     }
   }
+  NotificationOverlay {}
+  AudioPanel{}
 }

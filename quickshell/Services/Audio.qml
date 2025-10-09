@@ -8,46 +8,46 @@ pragma ComponentBehavior: Bound
  * A nice wrapper for default Pipewire audio sink and source.
  */
 Singleton {
-    id: root
+  id: root
 
-    property bool ready: Pipewire.defaultAudioSink?.ready ?? false
-    property PwNode sink: Pipewire.defaultAudioSink
-    property PwNode source: Pipewire.defaultAudioSource
+  property bool ready: Pipewire.defaultAudioSink?.ready ?? false
+  property PwNode sink: Pipewire.defaultAudioSink
+  property PwNode source: Pipewire.defaultAudioSource
+  property bool shouldShowOsd: false
+  property int volume: Math.round((Audio.sink?.audio?.volume ?? 0) * maxVolume)
+  property int maxVolume: 10
 
-    signal sinkProtectionTriggered(string reason);
+  signal sinkProtectionTriggered(string reason);
 
-    PwObjectTracker {
-        objects: [sink, source]
-    }
+  PwObjectTracker {
+      objects: [sink, source]
+  }
 
-    Connections { // Protection against sudden volume changes
-        target: sink?.audio ?? null
-        property bool lastReady: false
-        property real lastVolume: 0
-        function onVolumeChanged() {
-            if (!Config.options.audio.protection.enable) return;
-            if (!lastReady) {
-                lastVolume = sink.audio.volume;
-                lastReady = true;
-                return;
-            }
-            const newVolume = sink.audio.volume;
-            const maxAllowedIncrease = Config.options.audio.protection.maxAllowedIncrease / 100; 
-            const maxAllowed = Config.options.audio.protection.maxAllowed / 100;
+	Connections {
+		target: sink?.audio 
 
-            if (newVolume - lastVolume > maxAllowedIncrease) {
-                sink.audio.volume = lastVolume;
-                root.sinkProtectionTriggered("Illegal increment");
-            } else if (newVolume > maxAllowed) {
-                root.sinkProtectionTriggered("Exceeded max allowed");
-                sink.audio.volume = Math.min(lastVolume, maxAllowed);
-            }
-            if (sink.ready && (isNaN(sink.audio.volume) || sink.audio.volume === undefined || sink.audio.volume === null)) {
-                sink.audio.volume = 0;
-            }
-            lastVolume = sink.audio.volume;
-        }
-        
-    }
+    function onMutedChanged() {
+		  root.shouldShowOsd = true;
+		  hideTimer.restart();
+	  }
+
+		function onVolumeChanged() {
+			root.shouldShowOsd = true;
+			hideTimer.restart();
+		}
+	}
+
+	Timer {
+		id: hideTimer
+		interval: 1000
+		onTriggered: root.shouldShowOsd = false
+	}
+  
+  function volumeIcon() {
+    if (sink?.audio?.muted) return "   ";
+    if (volume === 0) return "   ";
+    else if (volume < maxVolume / 2) return "   ";
+    else return "   ";
+  }
 
 }
