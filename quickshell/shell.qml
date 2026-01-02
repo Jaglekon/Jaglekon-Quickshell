@@ -3,6 +3,7 @@
 import Quickshell;
 import Quickshell.Io;
 import QtQuick;
+import Quickshell.Hyprland;
 import "./Widgets";
 import "./Modules";
 import "./Themes";
@@ -34,9 +35,21 @@ Scope {
       PowerMenu {id: powerMenu}
       BarrierPower {id: barrierPower}
       Wallpaper {id: wallpaper}
-      WallpaperMenu {id: wallpaperMenu}
     }
   }
   NotificationOverlay {}
   AudioPanel{}
+
+  Loader {
+    id: rightPanelLoader
+    active: false
+    source: "Panels/WallpaperMenu.qml"
+  }
+
+  GlobalShortcut {
+    name: "sidebarRightToggle"
+    onPressed: {
+        rightPanelLoader.active = !rightPanelLoader.active
+    }
+  }
 }

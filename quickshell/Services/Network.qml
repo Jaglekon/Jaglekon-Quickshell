@@ -13,6 +13,8 @@ Singleton {
 
   property bool wifi: false
   property bool ethernet: false
+    property bool vpn: false
+    property string vpnName: ""
   property int updateInterval: 1000
   property string networkName: ""
   property int networkStrength
@@ -25,6 +27,7 @@ Singleton {
   function update() {
       updateConnectionType.startCheck();
       updateNetworkName.running = true;
+      updateVpn.startCheck();
       updateNetworkStrength.running = true;
   }
 
@@ -86,6 +89,27 @@ Singleton {
           onRead: data => {
               root.networkStrength = parseInt(data);
           }
+      }
+  }
+
+  Process {
+      id: updateVpn
+      property string buffer
+      command: ["sh", "-c", "wg show interfaces 2>/dev/null | head -1"]
+      running: true
+      function startCheck() {
+          buffer = "";
+          updateVpn.running = true;
+      }
+      stdout: SplitParser {
+          onRead: data => {
+              updateVpn.buffer += data + "\n";
+          }
+      }
+      onExited: (exitCode, exitStatus) => {
+          var d = (updateVpn.buffer || "").trim();
+          root.vpn = d.length > 0;
+          root.vpnName = d;
       }
   }
 

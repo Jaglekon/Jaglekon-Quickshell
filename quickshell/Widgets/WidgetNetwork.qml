@@ -7,7 +7,6 @@ import "../Services"
 ModuleWidget {
   id: moduleRoot
   spacing: 4
-  property bool clicked: false
 
   function networkIcon()
   {
@@ -25,8 +24,8 @@ ModuleWidget {
   }
 
   Item {
-    implicitWidth: icon.implicitWidth
-    implicitHeight: icon.implicitHeight
+    implicitWidth: network.implicitWidth
+    implicitHeight: network.implicitHeight
 
 
     Process {
@@ -46,30 +45,85 @@ ModuleWidget {
       running: false
     }
 
-    Click {
-      anchors.fill: parent
-      onMiddleClicked: {
-        moduleRoot.clicked = !moduleRoot.clicked;
-      }
-      onLeftClicked: {
-        nmProc.running = true;
-      }
-      onRightClicked: {
-        if (!Network.ethernet && !Network.wifi) {
-          netOnProc.running = true;
-        } else {
-          netOffProc.running = true;
+    Item {
+      implicitHeight: network.height
+      implicitWidth: network.width
+
+      Row {
+        id: network
+        spacing: 8
+
+
+        Item {
+          id: vpnWidget
+          implicitHeight: vpn.height
+          implicitWidth: vpn.width
+          property bool clicked: false
+
+          Process {
+            id: vpnStart
+            command: ["systemctl", "start", "wg-quick-wg0.service"]
+            running: false
+          }
+
+          Process {
+            id: vpnStop
+            command: ["systemctl", "stop", "wg-quick-wg0.service"]
+            running: false
+          }
+
+          ModuleText {
+            id: vpn
+            label: vpnWidget.clicked
+            ? (Network.vpn ? ("󰌾 VPN: " + (Network.vpnName && Network.vpnName.length > 0 ? Network.vpnName : "on")) : "󰌿 No VPN")
+            : (Network.vpn ? "󰌾" : "󰌿")
+            color: !(Network.vpn) ? Theme.red: (moduleRoot.hovered ? Theme.background_var : Theme.blue)
+            hovered: moduleRoot.hovered
+          }
+
+          MouseArea {
+            anchors.fill: parent
+            acceptedButtons: Qt.MiddleButton | Qt.LeftButton | Qt.RightButton
+            preventStealing: false
+            
+            cursorShape: Qt.PointingHandCursor
+            onClicked: {
+              if (mouse.button === Qt.LeftButton) ;
+              else if (mouse.button === Qt.RightButton) Network.vpn ? vpnStop.running = true : vpnStart.running = true;
+              else if (mouse.button === Qt.MiddleButton) vpnWidget.clicked = !vpnWidget.clicked;
+            }
+          }
+        }
+
+        Item {
+          id: networkWidget
+          implicitHeight: icon.height
+          implicitWidth: icon.width
+          property bool clicked: false
+
+          ModuleText {
+            id: icon
+            label: networkWidget.clicked
+            ? moduleRoot.networkIcon() + " " + (Network.rxDelta.toFixed(1) + " KB/s ↓  " + (Network.txDelta !== undefined ? Network.txDelta.toFixed(1) : "0.0") + " KB/s ↑")
+            : moduleRoot.networkIcon()
+            color: !(Network.wifi || Network.ethernet) ? Theme.red: (moduleRoot.hovered ? Theme.background_var : Theme.blue)
+            hovered: moduleRoot.hovered
+          }
+
+          MouseArea {
+            anchors.fill: parent
+            acceptedButtons: Qt.MiddleButton | Qt.LeftButton | Qt.RightButton
+            preventStealing: false
+            
+            cursorShape: Qt.PointingHandCursor
+            onClicked: {
+              if (mouse.button === Qt.LeftButton) nmProc.running = true;
+              else if (mouse.button === Qt.RightButton) !Network.ethernet && !Network.wifi ? netOnProc.running = true : netOffProc.running = true
+              else if (mouse.button === Qt.MiddleButton) networkWidget.clicked = !networkWidget.clicked;
+            }
+          }
         }
       }
-    }
-
-    ModuleText {
-      id: icon
-      label: clicked
-      ? moduleRoot.networkIcon() + "  " + (Network.rxDelta.toFixed(1) + " KB/s ↓  " + (Network.txDelta !== undefined ? Network.txDelta.toFixed(1) : "0.0") + " KB/s ↑")
-      : moduleRoot.networkIcon()
-      color: !(Network.wifi || Network.ethernet) ? Theme.red: (moduleRoot.hovered ? Theme.background_var : Theme.blue)
-      hovered: moduleRoot.hovered
     }
   }
 }

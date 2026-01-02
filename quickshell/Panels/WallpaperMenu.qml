@@ -1,4 +1,5 @@
 import Quickshell;
+import Quickshell.Widgets
 import QtQuick;
 import Quickshell.Io;
 import Quickshell.Hyprland;
@@ -11,14 +12,13 @@ import "../Themes";
 import "../Services";
 
 PanelWindow {
-  screen: modelData
   id: rightPanel
-  visible: root.openRightPanel && root.openRightPanel.indexOf(typeof modelData !== 'undefined' ? modelData : 0) !== -1
   WlrLayershell.layer: WlrLayer.Overlay
   WlrLayershell.exclusionMode: ExclusionMode.Ignore
 
-  property string name: "undefined"
-  property string path: "file:///home/" + name + "/Pictures/wallpapers"
+  property bool visbileMenu: false
+
+  property string path: "file:///home/" + Theme.user + "/Pictures/wallpapers"
 
   color: "transparent"
 
@@ -28,16 +28,6 @@ PanelWindow {
   implicitHeight: 9 * 90
   implicitWidth: 16 * 90
 
-  Process {
-        id: whoamiProc
-        command: ["whoami"]
-        running: true
-        stdout: SplitParser {
-            onRead: data => {
-                name = data.trim()
-            }
-        }
-  }
 
   Rectangle {
     id: rect
@@ -51,6 +41,7 @@ PanelWindow {
       anchors.verticalCenter: parent.verticalCenter
       anchors.horizontalCenter: parent.horizontalCenter
       cacheBuffer: 8
+      reuseItems: true
 
       width: parent.width - Theme.gapOut
       height: parent.height - Theme.gapOut
@@ -75,39 +66,42 @@ PanelWindow {
           radius: Theme.rounding
         }
 
-        Item {
+    
+        ClippingRectangle {
+          id: picRect
           anchors.centerIn: parent
-          height: grid.cellHeight * rect.grid
-          width: grid.cellWidth * rect.grid
+          height: pic.height
+          width: pic.width
+          radius: Theme.rounding
+
           Image {
             id: pic
-            source: fileURL
+            source: fileUrl
             anchors.centerIn: parent
-            height: parent.height
-            width: parent.width
+            height: grid.cellHeight * rect.grid
             fillMode: Image.PreserveAspectFit
             cache: true
             asynchronous: true
           }
-
-          Process {
-            id: matugen
-            command: ["matugen","image","/home/" + rightPanel.name + "/Pictures/wallpapers/" + fileName]
-            
-            running: false
-          }
-
-          MouseArea {
-            anchors.fill: parent
-            acceptedButtons: Qt.LeftButton
-            preventStealing: false
-            onClicked: {
-              matugen.running = true;
-            }
-            cursorShape: Qt.PointingHandCursor
-          }
+        } 
+             
+       
+        Process {
+          id: matugen
+          command: ["matugen","image","/home/" + Theme.user + "/Pictures/wallpapers/" + fileName]
+          
+          running: false
         }
 
+        MouseArea {
+          anchors.fill: picRect
+          acceptedButtons: Qt.LeftButton
+          preventStealing: false
+          onClicked: {
+            matugen.running = true;
+          }
+          cursorShape: Qt.PointingHandCursor
+        }
 
       }
 
@@ -124,22 +118,4 @@ PanelWindow {
   }
 
   
-  
-  GlobalShortcut {
-    name: "sidebarRightToggle"
-    onPressed: {
-      var monitor = Hyprland.monitorFor(screen);
-      var isFocused = Hyprland.focusedMonitor && monitor && (Hyprland.focusedMonitor.name === monitor.name);
-      if (!isFocused) return;
-      var idx = typeof modelData !== 'undefined' ? modelData : 0;
-      var arr = root.openRightPanel ? root.openRightPanel.slice() : [];
-      var i = arr.indexOf(idx);
-      if (i === -1) {
-        arr.push(idx);
-      } else {
-        arr.splice(i, 1);
-      }
-      root.openRightPanel = arr;
-    }
-  }
 }

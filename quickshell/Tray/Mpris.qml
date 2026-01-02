@@ -32,13 +32,6 @@ Item {
     if (p && p.canGoPrevious) p.previous();
   }
 
-  Click {
-    anchors.fill: parent
-    acceptedButtons: Qt.NoButton
-    onScrolled: mprisContainer.scrollPlayer(wheel.angleDelta.y)
-    cursorShape: undefined
-}
-
   Row {
     id: mpris
     spacing: 10
@@ -48,9 +41,11 @@ Item {
       implicitHeight: iconPrevious.implicitHeight
       anchors.verticalCenter: parent.verticalCenter
 
-      Click {
+      MouseArea {
         anchors.fill: parent
-        onLeftClicked: mprisContainer.previous()
+        preventStealing: false
+        cursorShape: Qt.PointingHandCursor
+        onClicked: mprisContainer.previous()
       }
 
       ModuleText {
@@ -68,9 +63,11 @@ Item {
       implicitHeight: iconPlay.implicitHeight
       anchors.verticalCenter: parent.verticalCenter
 
-      Click {
+      MouseArea {
         anchors.fill: parent
-        onLeftClicked: mprisContainer.togglePlaying()
+        preventStealing: false
+        cursorShape: Qt.PointingHandCursor
+        onClicked: mprisContainer.togglePlaying()
       }
 
       ModuleText {
@@ -87,9 +84,11 @@ Item {
       implicitHeight: iconPlay.implicitHeight
       anchors.verticalCenter: parent.verticalCenter
 
-      Click {
+      MouseArea {
         anchors.fill: parent
-        onLeftClicked: mprisContainer.next()
+        preventStealing: false
+        cursorShape: Qt.PointingHandCursor
+        onClicked: mprisContainer.next()
       }
 
       ModuleText {
@@ -104,14 +103,14 @@ Item {
       visible: player !== null
       anchors.verticalCenter: parent.verticalCenter
       active: true
-      sourceComponent: name === "yt-music" ? ytMusicComponent : playerIconComponent
+      sourceComponent: name === " " ? ytMusicComponent : playerIconComponent
     }
     Component {
       id: playerIconComponent
       ModuleText {
         id: playerIcon
         anchors.verticalCenter: parent.verticalCenter
-        label: MprisPlayerIcons.playerTypeIcon(name)
+        label: name
         hovered: moduleRoot.hovered
         font.pixelSize: Theme.fontPixelSize * 1
       }

@@ -75,10 +75,12 @@ ModuleWidget {
           radius: Theme.rounding * 0.5
           x: (width + moduleRoot.spacing) * index
           color: Audio.sink?.audio?.muted
-          ? (index < Audio.volume ? Theme.red : Theme.selection_background_var)
+          ? (moduleRoot.hovered
+          ? (index < Audio.volume ? Theme.red : Theme.selection_background)
+          : (index < Audio.volume ? Theme.red : Theme.background))
           : (moduleRoot.hovered
           ? (index < Audio.volume ? Theme.background_var : Theme.selection_background)
-          : (index < Audio.volume ? Theme.blue : Theme.selection_background))
+          : (index < Audio.volume ? Theme.blue : Theme.background))
         }
       }
     }

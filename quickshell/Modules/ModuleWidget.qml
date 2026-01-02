@@ -16,23 +16,17 @@ Item {
   property int heightImplicit: Theme.fontPixelSize
   property int widgetIndex: -1
   property int totalWidgets: 1 
-  property var workspaceContainerId: null  // Reference to WidgetWorkspaces component if this is a dynamic widget
-  property int workspaceIndex: -1  // Index within the WidgetWorkspaces component
+  property var workspaceContainerId: null
+  property int workspaceIndex: -1
   property string parentAnchorSide: parent && parent.anchorSide ? parent.anchorSide : "left"
   property bool isFirstWidget: widgetIndex === 0
   property bool isLastWidget: widgetIndex === totalWidgets - 1
   property real animatedWidth: contentRow.implicitWidth + 2 * paddingHorizontal
 
-  // Calculate radius for each corner - compacted version
-  function getCornerRadius(corner) {
-    const sides = {
-      "topLeft": parentAnchorSide === "right" ? isLastWidget : isFirstWidget,
-      "topRight": parentAnchorSide === "right" ? isFirstWidget : (parentAnchorSide === "left" ? isLastWidget : isFirstWidget), 
-      "bottomLeft": parentAnchorSide === "right" ? isLastWidget : (parentAnchorSide === "bottom" ? isFirstWidget : (parentAnchorSide === "top" ? isLastWidget : isFirstWidget)),
-      "bottomRight": parentAnchorSide === "right" ? isFirstWidget : (parentAnchorSide === "left" ? isLastWidget : (parentAnchorSide === "top" ? isLastWidget : isFirstWidget))
-    }
-    return sides[corner] ? Theme.rounding : 2
-  }
+  property int topLeft: (((parentAnchorSide === "right" || parentAnchorSide === "bottom") && isLastWidget === true) || ((parentAnchorSide === "left" || parentAnchorSide === "top") && isFirstWidget === true)) ? Theme.rounding : Theme.rounding / 3
+  property int topRight: (((parentAnchorSide === "left" || parentAnchorSide === "bottom") && isLastWidget === true) || ((parentAnchorSide === "right" || parentAnchorSide === "top") && isFirstWidget === true)) ? Theme.rounding : Theme.rounding / 3
+  property int bottomLeft: (((parentAnchorSide === "right" || parentAnchorSide === "top") && isLastWidget === true) || ((parentAnchorSide === "left" || parentAnchorSide === "bottom") && isFirstWidget === true)) ? Theme.rounding : Theme.rounding / 3
+  property int bottomRight: (((parentAnchorSide === "left" || parentAnchorSide === "top") && isLastWidget === true) || ((parentAnchorSide === "right" || parentAnchorSide === "bottom") && isFirstWidget === true)) ? Theme.rounding : Theme.rounding / 3
 
   default property alias content: contentRow.data
 
@@ -41,97 +35,22 @@ Item {
 
   Rectangle {
     id: box
-    color: "transparent"
-    radius: Theme.rounding + 3
+    border.width: Theme.borderSize
+    border.color: moduleRoot.borderColor
+    color: hovered ? moduleRoot.hoverColor : moduleRoot.backgroundColor
+    topLeftRadius: topLeft
+    topRightRadius: topRight
+    bottomLeftRadius: bottomLeft
+    bottomRightRadius: bottomRight
     width: contentRow.implicitWidth + 2 * paddingHorizontal
     height: heightImplicit + 2 * paddingVertical
     clip: true  
-    z: parent.z
 
     Behavior on width {
       NumberAnimation { 
         duration: 150
         easing.type: Easing.InOutQuad
       }
-    }
-
-    // Corner rectangles with preserved masking - compacted
-    Repeater {
-      model: [
-        { corner: "topLeft", maskId: topLeftMask },
-        { corner: "topRight", maskId: topRightMask },
-        { corner: "bottomLeft", maskId: bottomLeftMask },
-        { corner: "bottomRight", maskId: bottomRightMask }
-      ]
-      
-      Rectangle {
-        anchors.fill: parent
-        border.width: Theme.borderSize
-        border.color: moduleRoot.borderColor
-        color: hovered ? moduleRoot.hoverColor : moduleRoot.backgroundColor
-        radius: getCornerRadius(modelData.corner)
-        layer.enabled: true
-        layer.effect: MultiEffect {
-          maskEnabled: true
-          maskSource: modelData.maskId
-        }
-      }
-    }
-
-    Item {
-      id: topLeftMask
-      anchors.fill: parent
-      layer.enabled: true
-      visible: false
-      Rectangle {
-        anchors.left: parent.left
-        anchors.top: parent.top
-        width: parent.width / 2
-        height: parent.height / 2
-        color: "white"
-      }
-    }
-    
-    Item {
-      id: topRightMask
-      anchors.fill: parent
-      layer.enabled: true
-      visible: false
-      Rectangle {
-        anchors.right: parent.right
-        anchors.top: parent.top
-        width: parent.width / 2
-        height: parent.height / 2
-        color: "white"
-      }    
-    }
-
-    Item {
-      id: bottomLeftMask
-      anchors.fill: parent
-      layer.enabled: true
-      visible: false
-      Rectangle {
-        anchors.left: parent.left
-        anchors.bottom: parent.bottom
-        width: parent.width / 2
-        height: parent.height / 2
-        color: "white"
-      }
-    }
-    
-    Item {
-      id: bottomRightMask
-      anchors.fill: parent
-      layer.enabled: true
-      visible: false
-      Rectangle {
-        anchors.right: parent.right
-        anchors.bottom: parent.bottom
-        width: parent.width / 2
-        height: parent.height / 2
-        color: "white"
-      }    
     }
 
     Row {
@@ -149,6 +68,6 @@ Item {
     onExited: hovered = false
     acceptedButtons: Qt.NoButton
     cursorShape: undefined
-    z: 10 
+
   }
-  }
+}

@@ -12,7 +12,6 @@ ModuleWidget {
   property list<real> visualizerPoints: []
   property bool clicked: false
   property real gifSpeed: 0
-  spacing: 8
 
   Process {
     id: cavaProc
@@ -29,48 +28,65 @@ ModuleWidget {
     }
   }
 
-  Mpris {anchors.verticalCenter: parent.verticalCenter}
-
   Item {
-    id: cava
-    implicitWidth: moduleRoot.clicked ? cavaRow.width : cavaRow.width + spin.width + 4
-    implicitHeight: root.widgetHeight
-    anchors.verticalCenter: parent.verticalCenter
-    AnimatedImage {
-      id: spin
-      visible: !moduleRoot.clicked
-      anchors.right: cavaRow.left
-      anchors.rightMargin: 4
-      source: Qt.resolvedUrl("../Assets/spin.gif")
-      width: root.widgetHeight * 0.95
-      height: root.widgetHeight * 0.95
-      anchors.bottom: parent.bottom
-      fillMode: Image.PreserveAspectFit
-      speed: moduleRoot.gifSpeed
-    }
+    implicitHeight: music.height
+    implicitWidth: music.width
 
     Row {
-      anchors.verticalCenter: parent.verticalCenter
-      id: cavaRow
-      anchors.right: parent.right
-      spacing: 2
-      Repeater {
-        model: visualizerPoints.length > 0 ? visualizerPoints.length : 16
-        Rectangle {
+      id: music
+      spacing: 8
+
+      Mpris {
+        id: mprisContainer
+        anchors.verticalCenter: parent.verticalCenter
+      }
+
+      Item {
+        id: cava
+        implicitWidth: moduleRoot.clicked ? cavaRow.width : cavaRow.width + spin.width + 4
+        implicitHeight: root.widgetHeight
+        anchors.verticalCenter: parent.verticalCenter
+        AnimatedImage {
+          id: spin
+          visible: !moduleRoot.clicked
+          anchors.right: cavaRow.left
+          anchors.rightMargin: 4
+          source: Qt.resolvedUrl("../Assets/spin.gif")
+          width: root.widgetHeight * 0.95
+          height: root.widgetHeight * 0.95
+          anchors.bottom: parent.bottom
+          fillMode: Image.PreserveAspectFit
+          speed: moduleRoot.gifSpeed
+        }
+
+        Row {
           anchors.verticalCenter: parent.verticalCenter
-          width: Theme.borderSize
-          height: visualizerPoints[index] !== undefined ? Math.max(Math.round((visualizerPoints[index] / 16) * Theme.fontPixelSize * 1.5), Theme.borderSize) : Theme.borderSize
-          radius: Theme.rounding
-          color: hovered ? Theme.background_var : Theme.blue
-          Behavior on height { NumberAnimation { duration: 120 } }
+          id: cavaRow
+          anchors.right: parent.right
+          spacing: 2
+          Repeater {
+            model: visualizerPoints.length > 0 ? visualizerPoints.length : 16
+            Rectangle {
+              anchors.verticalCenter: parent.verticalCenter
+              width: Theme.borderSize
+              height: visualizerPoints[index] !== undefined ? Math.max(Math.round((visualizerPoints[index] / 16) * Theme.fontPixelSize * 1.5), Theme.borderSize) : Theme.borderSize
+              radius: Theme.rounding
+              color: hovered ? Theme.background_var : Theme.blue
+              Behavior on height { NumberAnimation { duration: 120 } }
+            }
+          }
         }
       }
     }
-    Click {
+
+    MouseArea {
       anchors.fill: parent
-      onMiddleClicked: {
-        moduleRoot.clicked = !moduleRoot.clicked;
-      }
+      acceptedButtons: Qt.MiddleButton
+      preventStealing: false
+      onWheel: mprisContainer.scrollPlayer(wheel.angleDelta.y)
+      cursorShape: undefined
+      onClicked: moduleRoot.clicked = !moduleRoot.clicked;
     }
+
   }
 }

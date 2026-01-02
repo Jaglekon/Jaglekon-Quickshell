@@ -14,7 +14,7 @@ import "../Themes"
       property var wsIcons: WorkspaceIcons.iconsForWorkspace(ws)
       borderColor: ws.id === Hyprland.focusedWorkspace.id ? Theme.purple : "transparent"
       hoverColor: ws.id === Hyprland.focusedWorkspace.id ? Theme.purple : Theme.blue
-      paddingHorizontal: 0
+      paddingHorizontal: 2
 
       content: [
         Item {
@@ -24,7 +24,7 @@ import "../Themes"
           ModuleText {
             id: workspaceText
             anchors.centerIn: parent
-            label: wsIcons.hasWindows ? ws.id.toString() + " " + wsIcons.icons.join(' ') : "  " + ws.id.toString() + "  "
+            label: wsIcons.hasWindows ? ws.id.toString() + " " + wsIcons.icons.join(' ') : ws.id.toString()
             hovered: moduleWidget.hovered
             color: hovered ? Theme.background : (ws.id === Hyprland.focusedWorkspace.id ? Theme.purple : Theme.blue)
           }

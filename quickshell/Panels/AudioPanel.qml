@@ -29,8 +29,8 @@ LazyLoader {
 
     Rectangle {
       id: background
+      anchors.fill: parent
       opacity: Theme.opacity
-      anchors.top: topRounding.bottom
       height: content.height + Theme.fontPixelSize
       width: content.width + Theme.fontPixelSize
       radius: Theme.rounding * 1.5
