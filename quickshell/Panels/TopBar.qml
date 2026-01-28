@@ -65,6 +65,7 @@ PanelWindow {
     WidgetNetwork {}
     WidgetBluetooth {}
     WidgetAudio {}
+    WidgetBrightness{}
     WidgetBattery {}
 
   }
