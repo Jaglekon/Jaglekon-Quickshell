@@ -1,4 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+.pragma library
+
+function logo(color) {
+    return `
 <svg
    inkscape:export-ydpi="600"
    inkscape:export-xdpi="600"
@@ -278,3 +281,6 @@
     </g>
   </g>
 </svg>
+
+    `;
+}

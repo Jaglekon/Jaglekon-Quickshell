@@ -1,6 +1,7 @@
 
 import QtQuick
 import Quickshell.Services.Mpris
+import Quickshell.Io
 import "../Modules"
 import "../Themes"
 import "../Services"
@@ -30,7 +31,7 @@ Item {
   function previous() {
     var p = mprisContainer.player;
     if (p && p.canGoPrevious) p.previous();
-  }
+  } 
 
   Row {
     id: mpris
@@ -103,7 +104,7 @@ Item {
       visible: player !== null
       anchors.verticalCenter: parent.verticalCenter
       active: true
-      sourceComponent: name === " " ? ytMusicComponent : playerIconComponent
+      sourceComponent: name === " " ? ytMusicComponent : (name === "󰽰 " ? feishinComponent : playerIconComponent)
     }
     Component {
       id: playerIconComponent
@@ -118,6 +119,12 @@ Item {
     Component {
       id: ytMusicComponent
       YoutubeMusic {
+        anchors.verticalCenter: parent.verticalCenter
+      }
+    }
+    Component {
+      id: feishinComponent
+      Feishin {
         anchors.verticalCenter: parent.verticalCenter
       }
     }

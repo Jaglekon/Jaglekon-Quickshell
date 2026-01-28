@@ -88,7 +88,7 @@ PanelWindow {
        
         Process {
           id: matugen
-          command: ["matugen","image","/home/" + Theme.user + "/Pictures/wallpapers/" + fileName]
+          command: ["matugen","--source-color-index","0","image","/home/" + Theme.user + "/Pictures/wallpapers/" + fileName]
           
           running: false
         }

@@ -60,7 +60,7 @@ PanelWindow {
     anchors.right: parent.right
     anchors.rightMargin: Theme.fontPixelSize
 
-    WidgetTray {}
+    WidgetTray2 {}
     WidgetClock {}
     WidgetNetwork {}
     WidgetBluetooth {}

@@ -32,14 +32,14 @@ Item {
 
   Process {
     id: youtubeProc
-    command: ["youtube-music"]
+    command: ["pear-desktop"]
     running: false
   }
   
 
   Process {
     id: youtubeKill
-    command: ["sh", "-c", "pkill -f youtube-music"]
+    command: ["sh", "-c", "pkill -f pear-desktop"]
     running: false
   }
   

@@ -3,17 +3,17 @@ pragma Singleton
         import QtQuick 2.0
 
         QtObject {
-          property color background: "#19120c"
-          property color background_var: "#312822"
-          property color selection_background: "#ffdcc2"
-          property color blue: "#ffb77c"
-          property color border: "#6c3a06"
+          property color background: "#1a110f"
+          property color background_var: "#322825"
+          property color selection_background: "#ffdad2"
+          property color blue: "#ffb4a4"
+          property color border: "#733426"
           property color red: "#93000a"
-          property color purple: "#c4cb97"
-          property color purple_border: "#c4cb97"
+          property color purple: "#dbc58c"
+          property color purple_border: "#dbc58c"
 
-          property string wallpaper: "/home/jag/Pictures/wallpapers/wp10.jpg"
-          property string logo: "/home/jag/.config/quickshell/main/Assets/logo.svg"
+          property string wallpaper: "/home/jag/Pictures/wallpapers/wp24.png"
+          property string logo: "/home/jag/.config/quickshell/test/quickshell/Assets/logo.svg"
           property string logo_back: "/home/jag/.config/quickshell/main/Assets/logo_back.svg"
 
           property string user: "jag"

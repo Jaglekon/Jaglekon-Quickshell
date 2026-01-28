@@ -1,4 +1,5 @@
 //@ pragma Env QS_NO_RELOAD\_POPUP=1
+//@ pragma UseQApplication
 
 import Quickshell;
 import Quickshell.Io;

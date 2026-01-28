@@ -29,7 +29,7 @@ Singleton {
                 icons.push(" ");
             } else if (appId.indexOf("obs") !== -1) {
                 icons.push("󰑋 ");
-            } else if (appId.indexOf("code") !== -1 || appId.indexOf("vscode") !== -1) {
+            } else if (appId.indexOf("code") !== -1 || appId.indexOf("vscode") !== -1 || appId.indexOf("codium") !== -1) {
                 icons.push("\ue70c ");
             } else if (appId.indexOf("librewolf") !== -1) {
                 icons.push("\uf269 ");
@@ -43,6 +43,8 @@ Singleton {
                 icons.push("󰿎 ");
             } else if (appId.indexOf("vesktop") !== -1 || appId.indexOf("discord") !== -1) {
                 icons.push("󰙯 ");
+            } else if (appId.indexOf("thunderbird") !== -1) {
+                icons.push(" ");
             } else {
                 icons.push("\uf059 ");
             }

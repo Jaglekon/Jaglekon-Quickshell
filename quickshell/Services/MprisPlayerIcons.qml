@@ -15,7 +15,7 @@ Singleton {
     if (id.indexOf("youtube_music") !== -1) return " ";
     if (id.indexOf("firefox") !== -1 || service.indexOf("firefox") !== -1 || id.indexOf("librewolf") !== -1 || service.indexOf("librewolf") !== -1) return " ";
     if (id.indexOf("spotify") !== -1 || service.indexOf("spotify") !== -1) return "󰓇 ";
-    if (id.indexOf("mpv") !== -1 || service.indexOf("mpv") !== -1) return " ";
+    if (id.indexOf("feishin") !== -1 || service.indexOf("feishin") !== -1) return "󰽰 ";
     if (id.indexOf("kdeconnect") !== -1 || service.indexOf("kdeconnect") !== -1 || desktop.indexOf("kdeconnect") !== -1) return " ";
     return "\uf059 ";
   }
